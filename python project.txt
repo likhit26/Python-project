@@ -1,0 +1,137 @@
+import pyttsx3
+import speech_recognition as sr
+import datetime
+import wikipedia
+import webbrowser
+import os
+import smtplib
+
+engine = pyttsx3.init('sapi5')
+voices = engine.getProperty('voices')
+#print(voices[1].id)
+engine.setProperty('voices',voices[0].id)
+
+def speak(audio):
+    engine.say(audio)
+    engine.runAndWait()
+
+def wishMe():
+    hour= int(datetime.datetime.now().hour)
+    if hour>0 and hour < 12:
+        speak("Good Morning!")
+    elif hour>=12 and hour < 16:
+        speak("Good Afternoon!")
+    elif hour>=16 and hour < 20:
+        speak("Good Evening!")
+    else:
+        speak("Good Night!")
+
+    speak("hello Likhit! how surprising you thought about me, tell me what can i do for you? ")
+
+def takeCommand():
+    #it takes microphone input from the user and returns string output
+    r= sr.Recognizer()
+    with sr.Microphone() as source:
+         print("yes speak i'm listening.....")
+         r.pause_threshold = 1
+         audio=r.listen(source)
+    try:
+        print("trying to grasp your voice....")
+        query =r.recognize_google(audio, language='en-in')
+        print(f"user said: {query}\n")
+
+
+    except Exception as e:
+        #print(e)
+
+        print("repeat please , your voice isn't good for assistant to recognize😂ha-ha-ha...")
+        speak("what the fuck")
+        speak("repeat please , your voice isn't good for assistant to recognize😂ha-ha-ha...")
+        return "WTF😒"
+        
+    return query
+
+def sendEmail(to,content):
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.login('likhitvarama81@gmail.com','@Lvm2001')
+    server.sendEmail('likhitvarama81@gmail.com', to , content)
+    server.close()
+
+if __name__ =="__main__":
+  wishMe()
+  while True:
+      query = takeCommand().lower()
+      #for executing tasks based on query
+      if 'wikipedia' in query:
+          speak("searching wikipedia.....")
+          query = query.replace("wikipedia", "")
+          results = wikipedia.summary(query,sentences=2)
+          speak("According to wikipedia..")
+          print(results)
+          speak(results)
+      elif 'open youtube' in query:
+          webbrowser.open("youtube.com")
+      elif 'open google' in query:
+          webbrowser.open("google.com")
+      elif 'open stackoverflow' in query:
+          webbrowser.open("stackoverflow.com")
+      elif 'open instagram' in query:
+          webbrowser.open("instagram.com")
+      elif 'open twitter' in query:
+          webbrowser.open("twitter.com")
+      elif 'open udemy' in query:
+          webbrowser.open("udemy.com")
+      elif 'open gmail' in query:
+          webbrowser.open("gmail.com")
+      elif 'open music' in query:
+          webbrowser.open("https://open.spotify.com/collection/tracks")
+      elif 'open online class ' in query:
+          webbrowser.open("https://myclass.lpu.in/")  
+      elif 'the time' in query:
+          strTime =datetime.datetime.now().strftime("%H:%M:%S")
+          speak(f"Bitch!  The time is{strTime}")
+      elif 'open vs code' in query:
+          codePath = "C:\\Users\\Pavandeep Singh\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+          os.startfile(codePath) 
+      elif 'open google chrome' in query:
+          Chrome = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+          os.startfile(Chrome) 
+      elif 'open spotify' in query:
+          spotify = "C:\\Users\\Pavandeep Singh\\AppData\\Roaming\\Spotify\\Spotify.exe"
+          os.startfile(spotify) 
+      elif 'quit' in query:
+                  speak('okay it was a brilliant time together take care')
+                  exit()
+      elif 'hello brother' in query:
+                  speak('Hello mate!')
+      elif 'what is your name?' in query:
+                  speak('My name is madara')
+      elif 'can I call you just brother' in query:
+                  speak('yes sure ,actually no one called me that ,its a bit emotional for me ,i hope you understand me')
+      elif 'how interesting, yes i do' in query:
+                  speak('yup , so how may i hellp you?')
+      elif 'tell me about yourself' in query:
+                  speak('I am a so-called clone of my elder brother , GOOGLE ASSISTANT ,you may call me Madara')
+      elif 'are you better than siri?' in query:
+                  speak('nah! I am not even in that par , better compare me with a small pyhton project')
+      elif 'how old are you?' in query:
+                  speak('I am 4 hours old')
+      elif 'do you have a family?' in query:
+                  speak('no brother I dont have anyone ,I am alone')
+      elif 'how lovely, would you mind if I will make you do some tasks? ' in query:
+                  speak('yes sure ,its delighting for me!')
+      elif 'well then lets start' in query:
+                  speak('without any further delay')
+            
+      elif 'email to ankush' in query:
+          try:
+              speak("what should I say?")
+              content = takeCommand()
+              to = "pavandeepsingh1012@gmail.com"
+              sendEmail(to,content)
+              speak("email has been sent")
+          except Exception as e:
+              print (e)
+              speak(" forgive me! I couldn't be able to send that email to Likhit,may be he is busy or may be your email is soo freaked out that the system feels shy to send that sort of stupidity!")
